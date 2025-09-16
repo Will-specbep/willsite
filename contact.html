@@ -338,11 +338,15 @@
                     status.textContent = 'Message sent successfully!';
                     document.getElementById('contactForm').reset();
                 } else {
-                    throw new Error('Failed to send email');
+                    const errorData = await response.json();
+                    const errorMessage = errorData.message || errorData.error || `HTTP ${response.status}: ${response.statusText}`;
+                    status.style.color = 'red';
+                    status.textContent = `Error: ${errorMessage}`;
+                    console.error('Resend API Error:', errorData);
                 }
             } catch (error) {
                 status.style.color = 'red';
-                status.textContent = 'Failed to send message. Please try again.';
+                status.textContent = `Network Error: ${error.message}`;
                 console.error('Error:', error);
             }
             
